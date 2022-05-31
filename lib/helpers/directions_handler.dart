@@ -1,7 +1,7 @@
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:googleads/main.dart';
 
-import '../data/staions_list.dart';
+import '../data/staions_list1.dart';
 import '../requests/mapbox_requests.dart';
 
 Future<Map> getDirectionsAPIResponse(LatLng currentLatLng, int index) async {

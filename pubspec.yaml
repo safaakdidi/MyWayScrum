@@ -65,6 +65,8 @@ dependencies:
   cached_network_image: ^3.2.0
   flutter_native_splash: ^2.0.2
   mapbox_gl: ^0.15.0
+  google_fonts: ^3.0.1
+  flutter_mapbox_navigation: ^0.0.26
 
 
 

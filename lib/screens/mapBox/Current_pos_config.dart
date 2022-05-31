@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:googleads/data/staions_list.dart';
+import 'package:googleads/data/staions_list1.dart';
 import 'package:googleads/main.dart';
 import 'package:googleads/screens/mapBox/MapboxPos.dart';
 import 'package:location/location.dart';
@@ -48,8 +48,8 @@ class _Pos_configState extends State<Pos_config> {
     // Get and store the directions API response in sharedPreferences
 
     for (int i = 0; i < Stations_list.All_Stations.length; i++) {
-      Map modifiedResponse = await getDirectionsAPIResponse(currentLatLng, i);
-      saveDirectionsAPIResponse(i, json.encode(modifiedResponse));
+      // Map modifiedResponse = await getDirectionsAPIResponse(currentLatLng, i);
+      // saveDirectionsAPIResponse(i, json.encode(modifiedResponse));
     }
     Navigator.pushAndRemoveUntil(
         context,

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:googleads/Layout/theme_helper.dart';
+
 import 'package:googleads/helpers/shared_prefs.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:googleads/screens/mapBox/prepare_ride.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
 
@@ -15,12 +18,14 @@ class MapPos extends StatefulWidget {
 
 class _MapPosState extends State<MapPos> {
   LatLng latLng = getLatLngFromSharedPrefs();
+  //late String currentAddress;
   late CameraPosition _initialCameraPosition;
   late MapboxMapController controller;
 @override
   void initState() {
     // TODO: implement initState
   _initialCameraPosition = CameraPosition(target: latLng, zoom: 15);
+  //currentAddress = getCurrentAddressFromSharedPrefs();
 
   super.initState();
   }
@@ -38,18 +43,57 @@ class _MapPosState extends State<MapPos> {
       body: SafeArea(
         child: Stack(
             children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.8,
-                child: MapboxMap(
-                  accessToken: dotenv.env['MAPBOX_ACCESS_TOKEN'],
-                  initialCameraPosition: _initialCameraPosition,
-                  onMapCreated: _onMapCreated,
-                  onStyleLoadedCallback: _onStyleLoadedCallback,
-                  myLocationEnabled: true,
-                  myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                  minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
+              MapboxMap(
+                accessToken: dotenv.env['MAPBOX_ACCESS_TOKEN'],
+                initialCameraPosition: _initialCameraPosition,
+                onMapCreated: _onMapCreated,
+                onStyleLoadedCallback: _onStyleLoadedCallback,
+                myLocationEnabled: true,
+                myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+                minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
+              ),
+              Positioned(
+                bottom: 0,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    clipBehavior: Clip.antiAlias,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'Hi there!',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 20),
+                            const Text('You are currently here:'),
+                            Text("currentAddress",
+                                style: const TextStyle(color: Colors.indigo)),
+                            const SizedBox(height: 20),
+                            RaisedButton(
+                                onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const PrepareRide())),
+                                shape: ThemeHelper().Shape(),
+                                child:
+                                ThemeHelper().inkStyle(context, "Where to Go?"),
+                                // child: Row(
+                                //     mainAxisAlignment: MainAxisAlignment.center,
+                                //     children: const [
+                                //       Text('Where to Go?'),
+                                //     ])
+                            ),
+                          ]),
+                    ),
+                  ),
                 ),
               ),
+
               ]
         ),
       ),
@@ -60,6 +104,7 @@ class _MapPosState extends State<MapPos> {
         },
         child: const Icon(Icons.my_location),
       ),
+
     ) ;
   }
 
