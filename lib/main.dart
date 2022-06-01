@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:googleads/admin/admin_metro.dart';
 import 'package:googleads/screens/authenticate/sign_in.dart';
 import 'package:googleads/screens/mapBox/Current_pos_config.dart';
 import 'package:googleads/screens/mapBox/MapboxPos.dart';
@@ -21,6 +22,7 @@ void main() async {
     sharedPreferences = await SharedPreferences.getInstance();
 
   await Firebase.initializeApp(
+    name: 'name-here',
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await dotenv.load(fileName: "assets/config/.env");
@@ -52,7 +54,7 @@ class MyApp extends StatelessWidget {
 
           ),
 
-          home:Wrapper(title: 'myWay',)
+          home:Wrapper(title: '',)
       ),
     );
   }
