@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:googleads/screens/authenticate/sign_in.dart';
+import 'package:googleads/screens/mapBox/Current_pos_config.dart';
 import 'package:googleads/screens/mapBox/MapboxPos.dart';
 import 'package:googleads/screens/mapBox/prepare_ride.dart';
 import 'package:googleads/services/geolocator_service.dart';
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
 
           ),
 
-          home:SignIn(),
+          home:Wrapper(title: 'myWay',)
       ),
     );
   }

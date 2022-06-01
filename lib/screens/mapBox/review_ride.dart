@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:googleads/Layout/footer.dart';
 import 'package:googleads/Layout/theme_helper.dart';
 import 'package:googleads/helpers/commons.dart';
 import 'package:googleads/helpers/map-box_handler.dart';
-import 'package:googleads/helpers/shared_prefs.dart';
 import 'package:googleads/screens/mapBox/MapboxPos.dart';
-import 'package:googleads/widgets/review_ride_bottom_sheet.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
 
@@ -157,54 +156,60 @@ _kTripEndPoints.add(CameraPosition(target:LatLng(geom[geom.length-1][1],geom[geo
                 onMapCreated: _onMapCreated,
                 onStyleLoadedCallback: _onStyleLoadedCallback,
                 myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                minMaxZoomPreference: const MinMaxZoomPreference(13, 16),
+                minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
               ),
             ),
             Positioned(
-              bottom: 0,
+              bottom: 56.0,
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Card(
                   clipBehavior: Clip.antiAlias,
                   child: Padding(
                     padding: const EdgeInsets.all(15),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            'Hi there!',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 20),
-                          const Text('Time left to arrive :'),
-                          Text(widget.modifiedResponse['duration'].toString(),
-                              style: const TextStyle(color: Colors.indigo)),
-                          const SizedBox(height: 20),
-                             const Text('The metro will arrive at :'),
-                          Text(dropOffTime,
-                              style: const TextStyle(color: Colors.indigo)),
-                          const SizedBox(height: 20),
-                          RaisedButton(
+                    child: Row(
+                      children: [
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text(
+                                'Hi there!',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 20),
+                              const Text('Time left to arrive :'),
+                              Text((widget.modifiedResponse['duration']/60).round().toString()+" min",
+                                  style: const TextStyle(color: Colors.indigo)),
+                              const SizedBox(height: 20),
+                                 const Text('The metro will arrive at :'),
+                              Text(dropOffTime,
+                                  style: const TextStyle(color: Colors.indigo)),
+                              const SizedBox(height: 20),
+
+
+                            ]),
+                        SizedBox(width: 20.0,),
+                        Container(
+                          decoration: ThemeHelper().buttonBoxDecoration(context),
+                          child: RaisedButton(
                             onPressed: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => const MapPos())),
                             shape: ThemeHelper().Shape(),
-                            child:
-                            ThemeHelper().inkStyle(context, "Go back to Map?"),
-                            // child: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.center,
-                            //     children: const [
-                            //       Text('Where to Go?'),
-                            //     ])
+                            padding: EdgeInsets.all(0.0),
+                            child:ThemeHelper().inkStyle(context,"Go Back To Map") ,
                           ),
-                        ]),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
+            Footer()
             //reviewRideBottomSheet(context, distance, dropOffTime),
           ],
         ),

@@ -2,14 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-import 'package:flutter/services.dart';
+
 import 'package:googleads/Layout/footer.dart';
 import 'package:googleads/Layout/header_widget.dart';
-import 'package:googleads/screens/authenticate/sign_in.dart';
-import 'package:googleads/screens/authenticate/forgot_password_page.dart';
-import 'package:googleads/screens/authenticate/forgot_password_verification_page.dart';
-import 'package:googleads/screens/sign_up/registration_page.dart';
-import 'package:googleads/wrapper.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -61,92 +57,7 @@ Container(
 )
         ],
       ),
-      drawer: Drawer(
-        child: Container(
-          decoration:BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: [0.0, 1.0],
-                  colors: [
-                    Theme.of(context).primaryColor.withOpacity(0.2),
-                    Theme.of(context).accentColor.withOpacity(0.5),
-                  ]
-              )),
-          child: ListView(
-            children: [
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    stops: [0.0, 1.0],
-                    colors: [ Theme.of(context).primaryColor,Theme.of(context).accentColor,],
-                  ),
-                ),
-                child: Container(
-                  alignment: Alignment.bottomLeft,
-                  child: Text("My Way",
-                    style: TextStyle(fontSize: 25,color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.screen_lock_landscape_rounded, size: _drawerIconSize, color: Theme.of(context).accentColor,),
-                title: Text('Splash Screen', style: TextStyle(fontSize: 17, color: Theme.of(context).accentColor),),
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Wrapper(title: "Splash Screen")));
-                },
-              ),
-              Divider(color: Theme.of(context).primaryColor, height: 1,),
 
-              ListTile(
-                leading: Icon(Icons.login_rounded,size: _drawerIconSize,color: Theme.of(context).accentColor),
-                title: Text('Login Page', style: TextStyle(fontSize: _drawerFontSize, color: Theme.of(context).accentColor),
-                ),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()),);
-                },
-              ),
-              Divider(color: Theme.of(context).primaryColor, height: 1,),
-              ListTile(
-                leading: Icon(Icons.person_add_alt_1, size: _drawerIconSize,color: Theme.of(context).accentColor),
-                title: Text('Registration Page',style: TextStyle(fontSize: _drawerFontSize,color: Theme.of(context).accentColor),),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => RegistrationPage()),);
-                },
-              ),
-              Divider(color: Theme.of(context).primaryColor, height: 1,),
-              ListTile(
-                leading: Icon(Icons.password_rounded, size: _drawerIconSize,color: Theme.of(context).accentColor,),
-                title: Text('Forgot Password Page',style: TextStyle(fontSize: _drawerFontSize,color: Theme.of(context).accentColor),),
-                onTap: () {
-                  Navigator.push( context, MaterialPageRoute(builder: (context) => ForgotPasswordPage()),);
-                },
-              ),
-              Divider(color: Theme.of(context).primaryColor, height: 1,),
-              ListTile(
-                leading: Icon(Icons.verified_user_sharp, size: _drawerIconSize,color: Theme.of(context).accentColor,),
-                title: Text('Verification Page',style: TextStyle(fontSize: _drawerFontSize,color: Theme.of(context).accentColor),),
-                onTap: () {
-                  Navigator.push( context, MaterialPageRoute(builder: (context) => ForgotPasswordVerificationPage()), );
-                },
-              ),
-              Divider(color: Theme.of(context).primaryColor, height: 1,),
-              ListTile(
-                leading: Icon(Icons.logout_rounded, size: _drawerIconSize,color: Theme.of(context).accentColor,),
-                title: Text('Logout',style: TextStyle(fontSize: _drawerFontSize,color: Theme.of(context).accentColor),),
-                onTap: () {
-                  SystemNavigator.pop();
-                },
-              ),
-            ],
-          ),
-
-        ),
-
-      ) ,
       body: Stack(
           children: [
             Center(
@@ -186,9 +97,9 @@ Container(
 
                   ),
                   SizedBox(height: 20,) ,
-                  Text('Mr. Donald Trump', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
+                  Text('Mr.guest', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),),
                   SizedBox(height: 20,),
-                  Text('Former President', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  Text('Student', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                   SizedBox(height: 10,),
                   Container(
                     padding: EdgeInsets.all(10),
@@ -225,12 +136,12 @@ Container(
            horizontal: 12, vertical: 4),
        leading: Icon(Icons.my_location),
        title: Text("Location"),
-       subtitle: Text("USA"),
+       subtitle: Text("Tunis"),
      ),
      ListTile(
        leading: Icon(Icons.email),
        title: Text("Email"),
-       subtitle: Text("donaldtrump@gmail.com"),
+       subtitle: Text("guest@gmail.com"),
      ),
      ListTile(
        leading: Icon(Icons.phone),
@@ -241,7 +152,7 @@ Container(
        leading: Icon(Icons.person),
        title: Text("About Me"),
        subtitle: Text(
-           "This is a about me link and you can khow about me in this section."),
+           "I'm a student "),
      ),    ])
 
                                     ]

@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:googleads/Layout/header_widget.dart';
 import 'package:googleads/Layout/theme_helper.dart';
-import 'package:googleads/screens/authenticate/forgot_password_page.dart';
-import 'package:googleads/screens/map/Google_Maps.dart';
-import 'package:googleads/screens/sign_up/registration_page.dart';
+import 'package:googleads/screens/authenticate/forget_password_page.dart';
+import 'package:googleads/screens/authenticate/register.dart';
+
+
+import 'package:googleads/screens/mapBox/MapboxPos.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/gestures.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -41,7 +43,7 @@ class _SignInState extends State<SignIn> {
           email: _emailController.text, password: _passwordController.text);
 
 
-      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Google_Maps()));
+      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MapPos()));
     }on FirebaseAuthException catch(e){
       var message='';
       switch (e.code){

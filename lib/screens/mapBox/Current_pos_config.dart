@@ -47,10 +47,10 @@ class _Pos_configState extends State<Pos_config> {
     sharedPreferences.setDouble('longitude', _locationData.longitude!);
     // Get and store the directions API response in sharedPreferences
 
-    for (int i = 0; i < Stations_list.All_Stations.length; i++) {
-      // Map modifiedResponse = await getDirectionsAPIResponse(currentLatLng, i);
-      // saveDirectionsAPIResponse(i, json.encode(modifiedResponse));
-    }
+    // for (int i = 0; i < Stations_list.All_Stations.length; i++) {
+    //   // Map modifiedResponse = await getDirectionsAPIResponse(currentLatLng, i);
+    //   // saveDirectionsAPIResponse(i, json.encode(modifiedResponse));
+    // }
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (_) => const MapPos()),

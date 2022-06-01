@@ -1,121 +1,144 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:googleads/Layout/header_widget.dart';
 import 'package:googleads/Layout/theme_helper.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:googleads/screens/authenticate/authenticate.dart';
+import 'package:hexcolor/hexcolor.dart';
 
+class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({Key? key}) : super(key: key);
 
-
-class RegistrationPage extends  StatefulWidget{
   @override
-  State<StatefulWidget> createState() {
-    return _RegistrationPageState();
-  }
+  _RegistrationPageState createState() => _RegistrationPageState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage>{
+class _RegistrationPageState extends State<RegistrationPage> {
+  final _formKey=GlobalKey<FormState>();
+  bool checkboxValue=false;
+  final _firstNameController=TextEditingController();
+  final _lastNameController=TextEditingController();
+  final _emailController=TextEditingController();
+  final _phoneNumberController=TextEditingController();
+  final _passwordController=TextEditingController();
+  final _comfirmPasswordController=TextEditingController();
 
-  final _formKey = GlobalKey<FormState>();
-  bool checkedValue = false;
-  bool checkboxValue = false;
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController() ;
-String imageUrl='' ;
-final _nameController = TextEditingController();
-  var loading = false ;
+  var loading =false;
+  void  _handleSignUpError(FirebaseAuthException e){
+    var message='';
+    switch (e.code){
+      case 'email-already-in-use':
+        message='This email is already in use';
+        break;
+      case 'invalid-email':
+        message='The email you entered wad invalid';
+        break;
+      case 'operation-not-allowed':
+        message='This operation is not allowed';
+        break;
+      case 'weak-password':
+        message='The password you entered is too weak';
+        break;
+      default:
+        message='An unknown error occurred';
 
-  Future<void> uploadingData() async {
-    await FirebaseFirestore.instance.collection("products").add({
-      'email': _emailController.text,
-      'imageUrl': imageUrl,
-      'name': _nameController.text,
-  }) ;}
+    }
+    showDialog(context: context, builder: (context){
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        title: Text(
+          'Sign Up failed',
+        ),
+        content: Text(message),
+        actions: [
+          TextButton(onPressed: (){
+            Navigator.of(context).pop();
+          }, child: Text(
+            'OK',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).accentColor,
+            ),
+          )
 
+          )
+        ],
 
- Future _SignUp() async {
-   setState((){loading=true ; }) ;
-   try {
-
-     await FirebaseAuth.instance.createUserWithEmailAndPassword(
-         email: _emailController.text,
-         password: _passwordController.text);
-
-
-     await FirebaseFirestore.instance.collection('users').add(
-         {
-           'email': _emailController.text,
-           'imageUrl': imageUrl,
-           'name': _nameController.text,
-         }
-     );
-
-     await showDialog(context: context, builder: (context) {
-       return AlertDialog(
-         title: Text('Sign up succeeded'),
-         content: Text('your account was created , you can now log in '),
-         actions: [
-           TextButton(onPressed: () {
-             Navigator.of(context).pop();
-           }, child: Text('Ok')),
-         ],
-       );
-     });
-     Navigator.of(context).pop();
-   }on FirebaseAuthException catch(e) {
-_handleSignUpError(e) ;
-setState(() {
-  loading= false ;
-}
-)
-;
-
- }}
-  void _handleSignUpError(FirebaseAuthException e){
-   String message ;
-   switch( e.code){
-     case'email-already-in-use' :
-       message = 'This email is already in use';
-       break ;
-     case 'invalid-email':
-       message = 'the email you ented is invalid';
-       break ;
-     case'operation-not-allowed' :
-       message= 'this operation is not allowed' ;
-       break ;
-     case 'week-password' :
-       message = "week password" ;
-       break ;
-     default:
-       message = 'an unknown error occurred' ;
-       break ;
-   }
-   showDialog(context: context, builder: (context) {
-     return AlertDialog(
-       title: Text('Sign up succeeded'),
-       content: Text('your account was created , you can now log in '),
-       actions: [
-         TextButton(onPressed: () {
-           Navigator.of(context).pop();
-         }, child: Text('Ok')),
-       ],
-     );
-   });
-
+      );
+    });
 
   }
+  _signUp() async{
+    setState(() {
+      loading=true;
+
+    });
+
+    try{
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
+      await FirebaseFirestore.instance.collection('users').add({
+        'email':_emailController.text,
+        'firstName':_firstNameController.text,
+        'lastName':_lastNameController.text,
+
+      });
+      showDialog(context: context, builder: (context){
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          title: Text(
+            'Sign Up succeeded',
+          ),
+          content: Text('Your account was created , you acn now log in'),
+          actions: [
+            TextButton(onPressed: (){
+              Navigator.of(context).pop();
+            }, child: Text(
+              'OK',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).accentColor,
+              ),
+            )
+
+            )
+          ],
+
+        );
+      });
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => Authenticate()
+          ),
+              (Route<dynamic> route) => false
+      );
+    }on FirebaseAuthException catch(e){
+      _handleSignUpError(e);
+      setState(() {
+        loading=false;
+      });
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
+
+
+
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
+      body:SingleChildScrollView(
         child: Stack(
           children: [
             Container(
-              height: 150,
-              child: HeaderWidget(150, false, Icons.person_add_alt_1_rounded),
+              height:150,
+              child: HeaderWidget(150,false,Icons.person_add_alt_1_rounded),
             ),
             Container(
               margin: EdgeInsets.fromLTRB(25, 50, 25, 10),
@@ -165,24 +188,45 @@ setState(() {
                         SizedBox(height: 30,),
                         Container(
                           child: TextFormField(
+                            controller: _firstNameController,
                             decoration: ThemeHelper().textInputDecoration('First Name', 'Enter your first name'),
+                            validator: (val) {
+                              if (val!.trim().isEmpty || val==null ) {
+                                return "Please enter your First Name";
+                              }
+                              return null;
+                            },
                           ),
                           decoration: ThemeHelper().inputBoxDecorationShaddow(),
+
                         ),
                         SizedBox(height: 30,),
                         Container(
                           child: TextFormField(
+                            controller: _lastNameController,
+
                             decoration: ThemeHelper().textInputDecoration('Last Name', 'Enter your last name'),
+                            validator: (val) {
+                              if (val!.trim().isEmpty || val==null ) {
+                                return "Please enter your Last Name";
+                              }
+                              return null;
+                            },
                           ),
                           decoration: ThemeHelper().inputBoxDecorationShaddow(),
                         ),
                         SizedBox(height: 20.0),
                         Container(
                           child: TextFormField(
+                            controller: _emailController,
+
                             decoration: ThemeHelper().textInputDecoration("E-mail address", "Enter your email"),
                             keyboardType: TextInputType.emailAddress,
                             validator: (val) {
-                              if(!(val!.isEmpty) && !RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$").hasMatch(val)){
+                              if(val!.trim().isEmpty || val==null ){
+                                return "Please enter your Email";
+                              }
+                              if(!(val.isEmpty) && !RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$").hasMatch(val)){
                                 return "Enter a valid email address";
                               }
                               return null;
@@ -193,12 +237,17 @@ setState(() {
                         SizedBox(height: 20.0),
                         Container(
                           child: TextFormField(
+                            controller: _phoneNumberController,
+
                             decoration: ThemeHelper().textInputDecoration(
                                 "Mobile Number",
                                 "Enter your mobile number"),
                             keyboardType: TextInputType.phone,
                             validator: (val) {
-                              if(!(val!.isEmpty) && !RegExp(r"^(\d+)*$").hasMatch(val)){
+                              if(val!.isEmpty || val==null ){
+                                return "Please enter your Mobile Number";
+                              }
+                              if(!(val.trim().isEmpty || val==null ) && !RegExp(r"^(\d+)*$").hasMatch(val)){
                                 return "Enter a valid phone number";
                               }
                               return null;
@@ -209,12 +258,34 @@ setState(() {
                         SizedBox(height: 20.0),
                         Container(
                           child: TextFormField(
+                            controller: _passwordController,
+
                             obscureText: true,
                             decoration: ThemeHelper().textInputDecoration(
                                 "Password*", "Enter your password"),
                             validator: (val) {
-                              if (val!.isEmpty) {
+                              if (val!.trim().isEmpty || val==null ) {
                                 return "Please enter your password";
+                              }
+                              return null;
+                            },
+                          ),
+                          decoration: ThemeHelper().inputBoxDecorationShaddow(),
+                        ),
+                        SizedBox(height: 20.0),
+                        Container(
+                          child: TextFormField(
+                            controller: _comfirmPasswordController,
+
+                            obscureText: true,
+                            decoration: ThemeHelper().textInputDecoration(
+                                "Comfirm Password*", "Enter your password"),
+                            validator: (val) {
+                              if (val!.trim().isEmpty || val==null ) {
+                                return "Please enter your password";
+                              }
+                              if(_passwordController.text!=_comfirmPasswordController.text){
+                                return "Paswords don't match";
                               }
                               return null;
                             },
@@ -230,11 +301,11 @@ setState(() {
                                   children: <Widget>[
                                     Checkbox(
                                         value: checkboxValue,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            checkboxValue = value!;
-                                            state.didChange(value);
-                                          });
+                                        onChanged: (bool? value) {
+
+                                          checkboxValue = value!;
+                                          state.didChange(value);
+
                                         }),
                                     Text("I accept all terms and conditions.", style: TextStyle(color: Colors.grey),),
                                   ],
@@ -246,7 +317,7 @@ setState(() {
                                     textAlign: TextAlign.left,
                                     style: TextStyle(color: Theme.of(context).errorColor,fontSize: 12,),
                                   ),
-                                )
+                                ),
                               ],
                             );
                           },
@@ -259,19 +330,30 @@ setState(() {
                           },
                         ),
                         SizedBox(height: 20.0),
-                        Container(
-                          decoration: ThemeHelper().buttonBoxDecoration(context),
-                          child: RaisedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _SignUp() ;
-                              }
-                            },
-                            shape: ThemeHelper().Shape(),
-                            padding: EdgeInsets.all(0.0),
-                            child:ThemeHelper().inkStyle(context,"Submit") ,
+                        if(loading)
+                          Container(
+                            child: CircularProgressIndicator(
+
+                              valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor.withOpacity(0.4)),
+                            ),
+
                           ),
-                        ),
+                        if(!loading)
+                          Container(
+                            decoration: ThemeHelper().buttonBoxDecoration(context),
+                            child: RaisedButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _signUp();
+
+                                }
+                              },
+                              shape: ThemeHelper().Shape(),
+                              padding: EdgeInsets.all(0.0),
+                              child:ThemeHelper().inkStyle(context,"Sign Up") ,
+                            ),
+                          ),
+
                         SizedBox(height: 30.0),
                         Text("Or create account using social media",  style: TextStyle(color: Colors.grey),),
                         SizedBox(height: 25.0),
