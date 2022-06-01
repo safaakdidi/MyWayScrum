@@ -21,12 +21,15 @@ Widget searchListView(
               String text = responses[index];
               if (isResponseForDestination) {
                 destinationController.text = text;
-                sharedPreferences.setString(
-                    'destination', json.encode(responses[index]));
+                // sharedPreferences.setString(
+                //     'destination', responses[index]);
+                // print("desssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+                // print(sharedPreferences.getString('destination')!);
               } else {
                 sourceController.text = text;
-                sharedPreferences.setString(
-                    'source', json.encode(responses[index]));
+                // sharedPreferences.setString(
+                //     'source', responses[index]);
+                // print(sharedPreferences.getString('source')!);
               }
               FocusManager.instance.primaryFocus?.unfocus();
             },

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:googleads/data/staions_list1.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:googleads/main.dart';
 LatLng getLatLngFromSharedPrefs() {
@@ -35,26 +36,30 @@ Map getGeometryFromSharedPrefs(int index) {
   Map geometry = getDecodedResponseFromSharedPrefs(index)['geometry'];
   return geometry;
 }
-String getSourceAndDestinationPlaceText(String type) {
-  String sourceAddress =
-  json.decode(sharedPreferences.getString('source')!)['name'];
-  String destinationAddress =
-  json.decode(sharedPreferences.getString('destination')!)['name'];
-
-  if (type == 'source') {
-    return sourceAddress;
-  } else {
-    return destinationAddress;
-  }
-}
+// String getSourceAndDestinationPlaceText(String type) {
+//   String sourceAddress =
+//   json.decode(sharedPreferences.getString('source')!)['name'];
+//   String destinationAddress =
+//   json.decode(sharedPreferences.getString('destination')!)['name'];
+//
+//   if (type == 'source') {
+//     return sourceAddress;
+//   } else {
+//     return destinationAddress;
+//   }
+//}
 LatLng getTripLatLngFromSharedPrefs(String type) {
-  List sourceLocationList =
-  json.decode(sharedPreferences.getString('source')!)['location'];
-  List destinationLocationList =
-  json.decode(sharedPreferences.getString('destination')!)['location'];
-  LatLng source = LatLng(sourceLocationList[0], sourceLocationList[1]);
-  LatLng destination =
-  LatLng(destinationLocationList[0], destinationLocationList[1]);
+  String sourstationName =
+  json.decode(sharedPreferences.getString('source')!);
+  final stations = Stations_list.All_Stations.firstWhere(
+          (station) => station.getName() == sourstationName,
+     );
+  LatLng source = LatLng(stations.getLat(), stations.getLong());
+  String desstationName = json.decode(sharedPreferences.getString('destination')!);
+  final stationd = Stations_list.All_Stations.firstWhere(
+        (station) => station.getName() == desstationName,
+  );
+  LatLng destination = LatLng(stationd.getLat(), stationd.getLong());
 
   if (type == 'source') {
     return source;

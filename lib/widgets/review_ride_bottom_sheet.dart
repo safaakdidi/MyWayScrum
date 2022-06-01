@@ -6,8 +6,8 @@ import '../helpers/shared_prefs.dart';
 
 Widget reviewRideBottomSheet(
     BuildContext context, String distance, String dropOffTime) {
-  String sourceAddress = getSourceAndDestinationPlaceText('source');
-  String destinationAddress = getSourceAndDestinationPlaceText('destination');
+  // String sourceAddress = getSourceAndDestinationPlaceText('source');
+  // String destinationAddress = getSourceAndDestinationPlaceText('destination');
 
   return Positioned(
     bottom: 0,
@@ -21,7 +21,7 @@ Widget reviewRideBottomSheet(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('$sourceAddress ➡ $destinationAddress',
+                Text('sourceAddress ➡ destinationAddress',
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium

@@ -17,6 +17,8 @@ Future getCyclingRouteUsingMapbox(LatLng source, LatLng destination) async {
   try {
     _dio.options.contentType = Headers.jsonContentType;
     final responseData = await _dio.get(url);
+    print("pssssssssssssssssssssssssssssssssssssssssssttttt");
+    print(responseData.data);
     return responseData.data;
   } catch (e) {
     final errorMessage = DioExceptions.fromDioError(e as DioError).toString();

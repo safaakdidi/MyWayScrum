@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:googleads/screens/map/follow_location.dart';
-import 'package:googleads/screens/mapBox/Current_pos_config.dart';
+import 'package:googleads/screens/authenticate/sign_in.dart';
+import 'package:googleads/screens/mapBox/MapboxPos.dart';
+import 'package:googleads/screens/mapBox/prepare_ride.dart';
 import 'package:googleads/services/geolocator_service.dart';
 import 'package:googleads/wrapper.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
 
           ),
 
-          home:Pos_config()
+          home:SignIn(),
       ),
     );
   }

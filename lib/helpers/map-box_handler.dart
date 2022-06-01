@@ -55,6 +55,8 @@ Future<Map> getDirectionsAPIResponse(
     LatLng sourceLatLng, LatLng destinationLatLng) async {
   final response =
   await getCyclingRouteUsingMapbox(sourceLatLng, destinationLatLng);
+  print("222222222222222222222222222222222222222222222222222222222222222222");
+  print(response);
   Map geometry = response['routes'][0]['geometry'];
   num duration = response['routes'][0]['duration'];
   num distance = response['routes'][0]['distance'];
@@ -63,7 +65,10 @@ Future<Map> getDirectionsAPIResponse(
     "geometry": geometry,
     "duration": duration,
     "distance": distance,
+
   };
+  print("333333333333333333333333333333333333333333333333333333333333333333333333333");
+  print(modifiedResponse);
   return modifiedResponse;
 }
 

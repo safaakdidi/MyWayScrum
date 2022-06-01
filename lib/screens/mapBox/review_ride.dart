@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:googleads/Layout/theme_helper.dart';
 import 'package:googleads/helpers/commons.dart';
 import 'package:googleads/helpers/map-box_handler.dart';
 import 'package:googleads/helpers/shared_prefs.dart';
+import 'package:googleads/screens/mapBox/MapboxPos.dart';
 import 'package:googleads/widgets/review_ride_bottom_sheet.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
@@ -35,11 +37,21 @@ class _ReviewRideState extends State<ReviewRide> {
     // initialise initialCameraPosition, address and trip end points
     _initialCameraPosition = CameraPosition(
         target: getCenterCoordinatesForPolyline(geometry), zoom: 11);
+    print("555555555555555555555555555555555555555555555555555555555555555555555");
+List geom=widget.modifiedResponse['geometry']['coordinates'];
+//print(geom);
+double d=geom[0][0];
+print(d);
 
-    for (String type in ['source', 'destination']) {
-      _kTripEndPoints
-          .add(CameraPosition(target: getTripLatLngFromSharedPrefs(type)));
-    }
+_kTripEndPoints.add(CameraPosition(target:LatLng(geom[0][1],geom[0][0])));
+_kTripEndPoints.add(CameraPosition(target:LatLng(geom[geom.length-1][1],geom[geom.length-1][0])));
+
+
+
+    // for (String type in ['source', 'destination']) {
+    //   _kTripEndPoints
+    //       .add(CameraPosition(target: getTripLatLngFromSharedPrefs(type)));
+    // }
     super.initState();
   }
 
@@ -99,12 +111,40 @@ class _ReviewRideState extends State<ReviewRide> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(Icons.arrow_back)),
-        title: const Text('Review Ride'),
+        title: Text("Ride Left" ,
+            style: TextStyle(color: Colors.white , fontWeight: FontWeight.bold)
+        ),
+        elevation: 0.5 ,
+        iconTheme: IconThemeData(color: Colors.white),
+        flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end : Alignment.bottomRight ,
+                  colors: <Color>[Theme.of(context).primaryColor , Theme.of(context).accentColor]
+              ),
+            )
+        ),
+        actions: [
+          Container(
+              margin: EdgeInsets.only(top: 16, right: 16),
+              child:Stack(
+                children: <Widget>[
+                  Icon(Icons.notifications),
+                  Positioned(right: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(1),
+                        decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(6),),
+                        constraints : BoxConstraints(minWidth: 12 , minHeight: 12) ,
+                        child: Text('5', style: TextStyle(color: Colors.white , fontSize: 8), textAlign: TextAlign.center,),
+
+
+                      )
+                  )
+                ],
+              )
+          )
+        ],
       ),
       body: SafeArea(
         child: Stack(
@@ -117,10 +157,55 @@ class _ReviewRideState extends State<ReviewRide> {
                 onMapCreated: _onMapCreated,
                 onStyleLoadedCallback: _onStyleLoadedCallback,
                 myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                minMaxZoomPreference: const MinMaxZoomPreference(11, 11),
+                minMaxZoomPreference: const MinMaxZoomPreference(13, 16),
               ),
             ),
-            reviewRideBottomSheet(context, distance, dropOffTime),
+            Positioned(
+              bottom: 0,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            'Hi there!',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 20),
+                          const Text('Time left to arrive :'),
+                          Text(widget.modifiedResponse['duration'].toString(),
+                              style: const TextStyle(color: Colors.indigo)),
+                          const SizedBox(height: 20),
+                             const Text('The metro will arrive at :'),
+                          Text(dropOffTime,
+                              style: const TextStyle(color: Colors.indigo)),
+                          const SizedBox(height: 20),
+                          RaisedButton(
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const MapPos())),
+                            shape: ThemeHelper().Shape(),
+                            child:
+                            ThemeHelper().inkStyle(context, "Go back to Map?"),
+                            // child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.center,
+                            //     children: const [
+                            //       Text('Where to Go?'),
+                            //     ])
+                          ),
+                        ]),
+                  ),
+                ),
+              ),
+            ),
+            //reviewRideBottomSheet(context, distance, dropOffTime),
           ],
         ),
       ),

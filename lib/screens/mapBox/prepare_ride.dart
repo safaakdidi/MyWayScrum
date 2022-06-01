@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:googleads/Layout/Frostedglass.dart';
 import 'package:googleads/data/staions_list1.dart';
+import 'package:googleads/helpers/map-box_handler.dart';
 import 'package:googleads/helpers/shared_prefs.dart';
 import 'package:googleads/screens/mapBox/review_ride.dart';
 import 'package:googleads/widgets/endpoints_card.dart';
@@ -8,6 +9,8 @@ import 'package:googleads/widgets/search_listview.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:collection/collection.dart';
 import 'package:lottie/lottie.dart';
+
+import '../../classes/Station.dart';
 
 
 class PrepareRide extends StatefulWidget {
@@ -89,6 +92,7 @@ class _PrepareRideState extends State<PrepareRide> {
   }
 
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Map" ,
@@ -144,17 +148,20 @@ class _PrepareRideState extends State<PrepareRide> {
                   : Container(),
               searchListView(responses, isResponseForDestination,
                   destinationController, sourceController),
-              Visibility( visible:visibility ,child:
-              Column(
-                children: [
-                  SizedBox(height: 30,),
-                  Container(
-                    height: 130,
-                    child:  ListView.builder(
-                        shrinkWrap: true,
+              Visibility( visible:visibility ,
+
+                  child: Column(
+                    children: [
+                      SizedBox(height: 30,),
+                      Container(
+                        height: 130,
+                        child:  ListView.builder(
+                            shrinkWrap: true,
+
                         scrollDirection: Axis.horizontal,
                         itemCount: metros.length,
-                        itemBuilder: (BuildContext context, int index) {return    Column(
+                        itemBuilder: (BuildContext context, int index) {
+                          return Column(
                           children: [
                             GestureDetector(
                                 child: FrostedGlassBox(      // theWidth is the width of the frostedglass
@@ -176,26 +183,35 @@ class _PrepareRideState extends State<PrepareRide> {
 
 
                                 ),
-                                onTap:(){
-                                  // LatLng Metroposition = getCurrentLatLngFromSharedPrefs();
-                                  // LatLng destinationLatLng = getTripLatLngFromSharedPrefs('destination');
-                                  // Map modifiedResponse =
-                                  //     await getDirectionsAPIResponse(sourceLatLng, destinationLatLng);
-                                  //
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (_) =>
-                                  //             ReviewRide(modifiedResponse: modifiedResponse)));
+                                onTap:() async{
+
+                                   final stationd = Stations_list.All_Stations.firstWhere(
+                                        (station) => station.getName() == destinationController.text,
+                                   );
+                                   LatLng destinationLatLng = LatLng(stationd.getLat(), stationd.getLong());
+
+                                   final stations = Stations_list.All_Stations.firstWhere(
+                                         (station) => station.getName() == sourceController.text,
+                                   );
+                                   LatLng sourceLatLng = LatLng(stations.getLat(), stations.getLong());
+
+                                   Map modifiedResponse =
+                                   await getDirectionsAPIResponse(sourceLatLng, destinationLatLng);
+                                   print("44444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444");
+                                   print(modifiedResponse);
+
+                                   Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              ReviewRide(modifiedResponse: modifiedResponse)));
                                 }
                             ),
                           ],
                         );  }
 
                     ),
-                  ),
-
-                ],
+                  )],
               )
               ),
               SizedBox(height: 150,)
