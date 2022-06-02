@@ -24,5 +24,5 @@ Future<Map> getDirectionsAPIResponse(LatLng currentLatLng, int index) async {
 }
 
 void saveDirectionsAPIResponse(int index, String response) {
-  sharedPreferences.setString('stations--$index', response);
+  sharedPreferences.setString('restaurant--$index', response);
 }

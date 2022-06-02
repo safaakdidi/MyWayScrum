@@ -59,8 +59,10 @@ class _Pos_configState extends State<Pos_config> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Material(
+      color: Colors.black,
+      child: Center(child: Image.asset('assets/Tunismetro1.jpg')),
+    );
   }
   }
 

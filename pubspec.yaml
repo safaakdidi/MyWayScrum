@@ -69,6 +69,7 @@ dependencies:
   flutter_mapbox_navigation: ^0.0.26
   permission_handler: ^9.2.0
   carousel_slider: ^4.1.1
+  animate_icons: ^2.0.0
 
 
 
